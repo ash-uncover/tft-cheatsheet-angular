@@ -1,0 +1,32 @@
+<div class='items'>
+  <div class='components-container'>
+    <ul class='items-list'>
+      <li
+        class='items-list-item'
+        *ngFor='let component of components'
+      >
+        <img
+          class='item-icon'
+          src={{component.icon}}
+          title={{component.name}}
+          (click)="onSelectComponent(component)"
+        />
+        <div class='item-container'>
+          <ul class="items-list">
+            <li
+              class='items-list-item'
+              *ngFor="let item of component.items"
+            >
+              <img
+                class='item-icon'
+                src={{item.icon}}
+                title={{item.name}}
+                (click)="onSelectItem(item)"
+              />
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

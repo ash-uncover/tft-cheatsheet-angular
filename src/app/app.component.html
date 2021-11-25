@@ -1,0 +1,21 @@
+<div class='app'>
+
+  <app-items
+    (selectComponent)='onComponentSelected($event)'
+    (selectItem)='onItemSelected($event)'
+  ></app-items>
+
+  <div class='app-content'>
+    <app-bench
+      [components]="selectedComponents"
+      [items]="selectedItems"
+      (removeComponent)='onComponentRemoved($event)'
+      (removeItem)='onItemRemoved($event)'
+    ></app-bench>
+  </div>
+
+  <app-champions
+    (selectChampion)='onChampionSelected($event)'
+  ></app-champions>
+
+</div>

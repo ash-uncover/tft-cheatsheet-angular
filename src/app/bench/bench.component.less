@@ -1,0 +1,50 @@
+.bench {
+  .items-list {
+    padding: 0;
+
+    .items-list-item {
+      display: inline-block;
+      list-style: none;
+      height: 40px;
+      opacity: 0.6;
+      border: 3px solid #C29449;
+      border-radius: 6px;
+      margin: 5px;
+      overflow: hidden;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      .item-icon {
+        width: 40px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .proposal-list {
+    padding: 0;
+    .proposal-list-item {
+      list-style: none;
+      +.proposal-list-item {
+        margin-top: 5px;
+      }
+      .items-list {
+        border-radius: 5px;
+        height: 56px;
+        background: grey;
+        .items-list-item {
+          border-color: #18859b;
+        }
+      }
+      &:hover {
+        .items-list {
+          .items-list-item {
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+}

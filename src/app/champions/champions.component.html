@@ -1,0 +1,17 @@
+<div class='champions'>
+  <div class='champions-container'>
+    <ul class='champions-list'>
+      <li
+        class='champions-list-item'
+        *ngFor='let champion of champions'
+      >
+        <img
+          class='champion-icon'
+          src={{champion.icon}}
+          title={{champion.name}}
+          (click)="onSelectChampion(champion)"
+        />
+      </li>
+    </ul>
+  </div>
+</div>
