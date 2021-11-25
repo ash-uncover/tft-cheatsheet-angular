@@ -4,28 +4,106 @@
   bottom: 0;
   right: 0;
   width: 75px;
+  user-select: none;
 
-  .champions-container {
-    color: white;
-    background: black;
+  .container {
+    color: #DDD;
+    background: hsl(0, 0%, 7%);
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 100%;
-    .champions-list {
+
+    .list {
       padding: 0;
       margin: 0;
       text-align: center;
       overflow: hidden;
 
-      .champions-list-item {
+      .list-item {
         list-style: none;
         padding: 8px;
-        height: 50px;
         opacity: 1;
-        .champion-icon {
-          width: 50px;
-          cursor: pointer;
+        cursor: pointer;
+      }
+    }
+
+    &.category-container {
+      right: 0;
+      width: 50px;
+      .category-list {
+        .category-list-item {
+          padding: 16px 0;
+
+          .category-text {
+            font-size: 1.5rem;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+          }
+
+          &:hover {
+            color: white;
+            background: #222222;
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+            .trait-container {
+              display: unset;
+            }
+          }
+        }
+      }
+    }
+
+    &.trait-container {
+      background: #222222;
+      right: 50px;
+      width: 50px;
+      display: none;
+      .list {
+        .list-item {
+          height: 30px;
+          .trait-list-item-content {
+            position: relative;
+            .trait-icon {
+              width: 30px;
+            }
+            .trait-badge {
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              color: black;
+              background: yellow;
+              height: 16px;
+              line-height: 16px;
+              width: 16px;
+              border-radius: 50%;
+              font-weight: bold;
+              font-size: 10pt;
+            }
+          }
+          &:hover {
+            background: #303030;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+            .champion-container {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+
+    &.champion-container {
+      position: absolute;
+      right: 50px;
+      width: 75px;
+      background: #303030;
+      display: none;
+      .list {
+        .list-item {
+          height: 50px;
+          .icon {
+            width: 50px;
+          }
         }
       }
     }

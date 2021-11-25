@@ -1,16 +1,49 @@
 <div class='champions'>
-  <div class='champions-container'>
-    <ul class='champions-list'>
+  <div class='container category-container'>
+    <ul class='list category-list'>
       <li
-        class='champions-list-item'
-        *ngFor='let champion of champions'
+        class='list-item category-list-item'
+        *ngFor='let category of categories'
       >
-        <img
-          class='champion-icon'
-          src={{champion.icon}}
-          title={{champion.name}}
-          (click)="onSelectChampion(champion)"
-        />
+        <span class='category-text'>
+          {{category.name}}
+        </span>
+        <div class='container trait-container'>
+          <ul class='list trait-list'>
+            <li
+              class='list-item trait-list-item'
+              *ngFor='let trait of category.traits'
+            >
+              <div class='trait-list-item-content'>
+                <img
+                  class='icon trait-icon'
+                  src={{trait.icon}}
+                  title={{trait.name}}
+                />
+                <div class='badge trait-badge'>
+                  <span>
+                    {{trait.champions.length}}
+                  </span>
+                </div>
+              </div>
+              <div class='container champion-container'>
+                <ul class='list champion-list'>
+                  <li
+                    class='list-item champion-list-item'
+                    *ngFor='let champion of trait.champions'
+                  >
+                    <img
+                      class='icon champion-icon'
+                      src={{champion.icon}}
+                      title={{champion.name}}
+                      (click)="onSelectChampion(champion)"
+                    />
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
       </li>
     </ul>
   </div>

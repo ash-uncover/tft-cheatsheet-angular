@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { ItemData, ItemModel, ComponentModel, ChampionData, ChampionModel } from './model';
+import {
+  ItemData,
+  ItemModel,
+  ComponentModel,
+  TraitData,
+  TraitCategoryModel,
+  TraitModel,
+  ChampionData,
+  ChampionModel,
+} from './model';
 
 import DataJson from '../assets/json/data.json';
 
@@ -17,6 +26,22 @@ const ITEMS_ID = [
   91, 92, 93, 94, 95, 96, 97, 98, 99,
   2190
 ];
+const TRAIT_ORIGINS = [
+  'Academy',
+  'Chemtech',
+  'Clockwork',
+  'Cuddly',
+  'Enforcer',
+  'Glutton',
+  'Imperial',
+  'Mercenary',
+  'Mutant',
+  'Scrap',
+  'Sister',
+  'Socialite',
+  'Syndicate',
+  'Yordle',
+];
 
 const ITEMS: ItemData[] = Object.values(DataJson.items.reduce<any>((acc, item) => {
   if (COMPONENTS_ID.indexOf(item.id) !== -1 || ITEMS_ID.indexOf(item.id) !== -1) {
@@ -26,9 +51,12 @@ const ITEMS: ItemData[] = Object.values(DataJson.items.reduce<any>((acc, item) =
   return acc;
 }, {}));
 
+const TRAITS: TraitData[] = DataJson.sets['6'].traits
 const CHAMPIONS: ChampionData[] = DataJson.sets['6'].champions
 
-const IMAGE_URL = 'https://raw.communitydragon.org/11.23/game/';
+const ITEM_IMAGE_URL = 'https://raw.communitydragon.org/11.23/game/';
+const CHAMPION_IMAGE_URL_2 = 'https://raw.communitydragon.org/11.23/game/assets/characters/';
+const CHAMPION_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/11.23.1/img/champion/';
 
 const comparatorComponents = function (component1: ComponentModel, component2: ComponentModel) {
   return COMPONENTS_ID.indexOf(component1.id) - COMPONENTS_ID.indexOf(component2.id)
@@ -45,9 +73,11 @@ const memoizationGetItemsByComponent: any = {}
 })
 export class DataService {
 
-  champions: ChampionModel[];
-  items: ItemModel[];
-  components: ComponentModel[];
+  traits: TraitModel[]
+  categories: TraitCategoryModel[]
+  champions: ChampionModel[]
+  items: ItemModel[]
+  components: ComponentModel[]
 
   constructor() {
     this.components = ITEMS
@@ -56,7 +86,7 @@ export class DataService {
         id: item.id,
         name: item.name,
         desc: item.desc,
-        icon: `${IMAGE_URL}${item.icon}`.replace('.dds', '.png').toLowerCase(),
+        icon: `${ITEM_IMAGE_URL}${item.icon}`.replace('.dds', '.png').toLowerCase(),
         items: [] as ItemModel[],
         unique: item.unique
       }))
@@ -69,7 +99,7 @@ export class DataService {
           id: item.id,
           name: item.name,
           desc: item.desc,
-          icon: `${IMAGE_URL}${item.icon}`.replace('.dds', '.png').toLowerCase(),
+          icon: `${ITEM_IMAGE_URL}${item.icon}`.replace('.dds', '.png').toLowerCase(),
           components: [] as ComponentModel[],
           unique: item.unique
         };
@@ -92,15 +122,66 @@ export class DataService {
       })
     })
 
+    const categoryOrigin = {
+      id: 'origin',
+      name: 'Origin',
+      traits: [] as TraitModel[],
+    }
+    const categoryClass = {
+      id: 'class',
+      name: 'Class',
+      traits: [] as TraitModel[],
+    }
+    this.categories = [categoryClass, categoryOrigin ]
+
+    this.traits = TRAITS.map(trait => {
+      const model = {
+        id: trait.apiName,
+        name: trait.name,
+        icon: `${ITEM_IMAGE_URL}${trait.icon}`.replace('.dds', '.png').toLowerCase(),
+        category: TRAIT_ORIGINS.indexOf(trait.name) === -1 ? categoryClass : categoryOrigin,
+        champions: [] as ChampionModel[],
+      }
+      if (model.category === categoryOrigin) {
+        categoryOrigin.traits.push(model)
+      } else {
+        categoryClass.traits.push(model)
+      }
+      return model
+    })
+
     this.champions = CHAMPIONS.map(champion => {
-      return {
+      const championIconUrl = champion.ability.icon.split('/')
+      const championIconName = championIconUrl[2].replace('TFT6_', '')
+      const championIcon2 = `${CHAMPION_IMAGE_URL_2}${championIconName}/hud/${championIconName}_square.png`
+      const championModel = {
         id: champion.apiName,
         name: champion.name,
-        icon: `${IMAGE_URL}${champion.icon}`.replace('.dds', '.png').toLowerCase(),
+        icon: `${CHAMPION_IMAGE_URL}${championIconName}.png`,
         cost: champion.cost,
-        traits: champion.traits
+        traits: [] as TraitModel[]
       }
+      const championTraits = champion.traits.map((traitName) => {
+        const championTrait = this.traits.find(trait => trait.name === traitName)!
+        championTrait.champions.push(championModel)
+        return championTrait
+      })
+      championModel.traits = championTraits
+
+      return championModel
     }).sort((champ1, champ2) => champ1.name.localeCompare(champ2.name))
+  }
+
+  getCategories(): TraitCategoryModel[] {
+    return this.categories;
+  }
+
+  getTraits(): TraitModel[] {
+    return this.traits;
+  }
+
+  getChampions(): ChampionModel[] {
+    return this.champions;
   }
 
   getComponents(): ComponentModel[] {
@@ -187,9 +268,5 @@ export class DataService {
       }
       return true
     })
-  }
-
-  getChampions(): ChampionModel[] {
-    return this.champions;
   }
 }

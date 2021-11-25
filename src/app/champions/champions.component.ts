@@ -1,6 +1,9 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
-import { ChampionModel } from '../model'
+import {
+  TraitCategoryModel,
+  ChampionModel,
+} from '../model'
 import { DataService } from '../data.service'
 
 @Component({
@@ -12,12 +15,18 @@ export class ChampionsComponent implements OnInit {
 
   @Output() selectChampion = new EventEmitter<ChampionModel>();
 
+  categories: TraitCategoryModel[] = []
   champions: ChampionModel[] = []
 
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
+    this.getCategories()
     this.getChampions()
+  }
+
+  getCategories(): void {
+    this.categories = this.dataService.getCategories()
   }
 
   getChampions(): void {
