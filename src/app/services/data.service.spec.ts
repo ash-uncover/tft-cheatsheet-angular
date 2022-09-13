@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing'
 
 import { DataService } from './data.service'
 
-import { ItemModel, ComponentModel } from './model';
+import { ItemModel, ComponentModel } from '../model';
 
 describe('DataService', () => {
   let service: DataService

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
 import {
   ItemData,
@@ -9,11 +9,11 @@ import {
   TraitModel,
   ChampionData,
   ChampionModel,
-} from './model';
+} from '../model'
 
-import DataJson from '../assets/json/data.json';
+import DataJson from '../../assets/json/data.json'
 
-const COMPONENTS_ID = [1, 2, 5, 6, 3, 4, 7, 9, 8];
+const COMPONENTS_ID = [1, 2, 5, 6, 3, 4, 7, 9, 8]
 const ITEMS_ID = [
   11, 12, 13, 14, 15, 16, 17, 18, 19,
   21, 22, 23, 24, 25, 26, 27, 28, 29,
@@ -25,7 +25,7 @@ const ITEMS_ID = [
   81, 82, 83, 84, 85, 86, 87, 88, 89,
   91, 92, 93, 94, 95, 96, 97, 98, 99,
   2190
-];
+]
 const TRAIT_ORIGINS = [
   'Academy',
   'Chemtech',
@@ -41,22 +41,22 @@ const TRAIT_ORIGINS = [
   'Socialite',
   'Syndicate',
   'Yordle',
-];
+]
 
 const ITEMS: ItemData[] = Object.values(DataJson.items.reduce<any>((acc, item) => {
   if (COMPONENTS_ID.indexOf(item.id) !== -1 || ITEMS_ID.indexOf(item.id) !== -1) {
-    const entry = `item${item.id}`;
-    acc[entry] = item;
+    const entry = `item${item.id}`
+    acc[entry] = item
   }
-  return acc;
+  return acc
 }, {}));
 
 const TRAITS: TraitData[] = DataJson.sets['6'].traits
 const CHAMPIONS: ChampionData[] = DataJson.sets['6'].champions
 
-const ITEM_IMAGE_URL = 'https://raw.communitydragon.org/11.23/game/';
-const CHAMPION_IMAGE_URL_2 = 'https://raw.communitydragon.org/11.23/game/assets/characters/';
-const CHAMPION_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/11.23.1/img/champion/';
+const ITEM_IMAGE_URL = 'https://raw.communitydragon.org/11.23/game/'
+const CHAMPION_IMAGE_URL_2 = 'https://raw.communitydragon.org/11.23/game/assets/characters/'
+const CHAMPION_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/11.23.1/img/champion/'
 
 const comparatorComponents = function (component1: ComponentModel, component2: ComponentModel) {
   return COMPONENTS_ID.indexOf(component1.id) - COMPONENTS_ID.indexOf(component2.id)
@@ -90,7 +90,7 @@ export class DataService {
         items: [] as ItemModel[],
         unique: item.unique
       }))
-      .sort(comparatorComponents);
+      .sort(comparatorComponents)
 
     this.items = ITEMS
       .filter((item: ItemData) => ITEMS_ID.indexOf(item.id) !== -1)
@@ -102,17 +102,17 @@ export class DataService {
           icon: `${ITEM_IMAGE_URL}${item.icon}`.replace('.dds', '.png').toLowerCase(),
           components: [] as ComponentModel[],
           unique: item.unique
-        };
+        }
         item.from.forEach((id: number) => {
-          const component = this.getComponent(id)!;
+          const component = this.getComponent(id)!
           if (!component.items.some((i: ItemModel) => i.id === result.id)) {
-            component.items.push(result);
+            component.items.push(result)
           }
-          result.components.push(component);
-        });
-        return result;
+          result.components.push(component)
+        })
+        return result
       })
-      .sort((item1: ItemModel, item2: ItemModel) => item1.id - item2.id);
+      .sort((item1: ItemModel, item2: ItemModel) => item1.id - item2.id)
 
     this.components.forEach((component) => {
       component.items.sort((item1: ItemModel, item2: ItemModel) => {

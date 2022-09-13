@@ -2,7 +2,8 @@ import { Component, OnInit, DoCheck, EventEmitter, Input, Output, SimpleChanges 
 
 import { ItemBaseModel, ItemModel, ComponentModel } from '../model'
 
-import { DataService } from '../data.service'
+import { DataService } from '../services/data.service'
+import { LolchessService } from '../services/lolchess.service'
 
 @Component({
   selector: 'app-bench',
@@ -21,10 +22,11 @@ export class BenchComponent implements OnInit, DoCheck {
   itemsProposal: ItemBaseModel[][] = []
   itemsData: ItemModel[] = []
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private lolchessService: LolchessService) {}
 
   ngOnInit(): void {
     this.getItemsData()
+    this.getItemsTrend()
   }
 
   ngDoCheck(): void {
@@ -47,5 +49,9 @@ export class BenchComponent implements OnInit, DoCheck {
 
   getItemsData(): void {
     this.itemsData = this.dataService.getItems()
+  }
+
+  getItemsTrend(): void {
+    this.lolchessService.getItemsTrend()
   }
 }

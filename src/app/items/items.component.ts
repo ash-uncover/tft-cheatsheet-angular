@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core'
 
 import { ItemModel, ComponentModel } from '../model'
-import { DataService } from '../data.service'
+import { DataService } from '../services/data.service'
 
 @Component({
   selector: 'app-items',
